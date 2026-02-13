@@ -10,3 +10,6 @@ backend/target/
 .idea/
 .DS_Store
 Thumbs.db
+
+# local git worktrees
+worktrees/

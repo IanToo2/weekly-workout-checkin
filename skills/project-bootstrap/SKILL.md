@@ -22,6 +22,21 @@ Use this skill when starting local development or onboarding.
 - Run `cd frontend` then `npm install` and `npm run dev`.
 - Verify app loads and can read `/api/rules`.
 
+4. Confirm git collaboration layout.
+- Run `git worktree list` and verify planner/backend/frontend/qa worktrees exist.
+- Run `git branch --list` and verify `role/planner`, `role/backend`, `role/frontend`, `role/qa`.
+
+5. Confirm push readiness.
+- For each role branch, set upstream once: `git push -u origin role/<name>`.
+- Ensure `git status --short` is clean before starting a new task.
+
+## Worktree Paths
+
+- Planner: `worktrees/planner`
+- Backend: `worktrees/backend`
+- Frontend: `worktrees/frontend`
+- QA: `worktrees/qa`
+
 ## Quick Checks
 
 - Backend port: `8080`
@@ -32,3 +47,4 @@ Use this skill when starting local development or onboarding.
 
 - Do not add new infra unless asked.
 - If startup fails, report exact command and error first.
+- Do not commit or push from `main` for role tasks.

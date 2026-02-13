@@ -25,6 +25,7 @@ Use this skill when the task is about this project: weekly workout check-ins, we
 1. Freeze contract first.
 - Confirm API request/response fields before editing UI or service logic.
 - Keep rule constants centralized in backend service.
+- Keep request and response examples in the task note before coding.
 
 2. Implement backend before frontend wiring.
 - Add or update JPA entities and repository constraints.
@@ -43,6 +44,21 @@ Use this skill when the task is about this project: weekly workout check-ins, we
 5. Document only run-critical info.
 - Update root `README.md` run steps if command or env changes.
 
+6. Finish task with git publish.
+- Work only in the assigned role branch.
+- Run `git status --short` and review changed files.
+- Commit with clear message: `feat|fix|chore(scope): summary`.
+- Push branch: `git push origin <role-branch>`.
+- Share commit hash and PR URL (or PR create command) in task result.
+
+## Collaboration Mode (Worktree)
+
+- Planner worktree: `worktrees/planner` on `role/planner`
+- Backend worktree: `worktrees/backend` on `role/backend`
+- Frontend worktree: `worktrees/frontend` on `role/frontend`
+- QA worktree: `worktrees/qa` on `role/qa`
+- Merge order: `role/planner` -> `role/backend` -> `role/frontend` -> `role/qa` -> `main`
+
 ## File Targets
 
 - Backend: `backend/src/main/java/com/toyproject/fitness/checkin/`
@@ -55,3 +71,4 @@ Use this skill when the task is about this project: weekly workout check-ins, we
 - Do not add heavy architecture or extra services unless asked.
 - Prefer small, reversible edits and keep naming explicit.
 - Keep dependencies minimal.
+- Do not push to `main` directly from role worktrees.

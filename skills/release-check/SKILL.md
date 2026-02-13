@@ -30,6 +30,12 @@ Use this skill before demo or deploy.
 4. Runbook sanity.
 - Root `README.md` startup commands are current.
 
+5. Git sanity.
+- Branch is clean before release check starts.
+- Role branches are merged in order: planner, backend, frontend, qa.
+- `main` contains only reviewed changes.
+- Each completed role task has commit(s) pushed to origin.
+
 ## Output Format
 
 - Report only: Passed, Failed, and exact failing step.
@@ -39,3 +45,4 @@ Use this skill before demo or deploy.
 
 - No refactor during release check unless requested.
 - Prefer smallest possible fix for blockers.
+- Block release if task completion exists only locally (not pushed).
