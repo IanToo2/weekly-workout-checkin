@@ -1,0 +1,19 @@
+﻿spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/toyproject
+    username: toyuser
+    password: toysecret
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: info
