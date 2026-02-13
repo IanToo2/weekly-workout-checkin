@@ -32,8 +32,7 @@ metadata:
 
 5. Git 무결성.
 - 릴리즈 체크 시작 시 브랜치가 clean 상태다.
-- 역할 브랜치 머지 순서(planner, backend, frontend, qa)가 지켜진다.
-- 완료된 역할 task 커밋이 origin에 push되어 있다.
+- 릴리즈 대상 작업 커밋이 origin에 push되어 있다.
 - `main`에는 리뷰된 변경만 포함된다.
 
 ## 결과 보고 형식

@@ -45,19 +45,17 @@ metadata:
 - 명령어나 환경값이 바뀌면 루트 `README.md` 실행 절차를 갱신한다.
 
 6. 작업 완료 시 git publish까지 수행한다.
-- 지정된 역할 브랜치에서만 작업한다.
+- 현재 작업 브랜치에서 진행한다.
 - `git status --short`로 변경 파일을 확인한다.
 - 커밋 메시지는 `feat|fix|chore(scope): summary` 형식을 사용한다.
-- 브랜치를 푸시한다: `git push origin <role-branch>`.
+- 브랜치를 푸시한다: `git push origin <current-branch>`.
 - 결과 보고 시 커밋 해시와 PR URL(또는 PR 생성 명령)을 포함한다.
 
-## 협업 모드 (Worktree)
+## 작업 모드 (Single Branch)
 
-- 기획 worktree: `worktrees/planner` / 브랜치 `role/planner`
-- 백엔드 worktree: `worktrees/backend` / 브랜치 `role/backend`
-- 프론트엔드 worktree: `worktrees/frontend` / 브랜치 `role/frontend`
-- QA worktree: `worktrees/qa` / 브랜치 `role/qa`
-- 머지 순서: `role/planner` -> `role/backend` -> `role/frontend` -> `role/qa` -> `main`
+- 하나의 로컬 작업 트리에서 백엔드/프론트 변경을 함께 진행한다.
+- 작업 단위별 브랜치를 사용하고 완료 후 원격에 푸시한다.
+- 필요 시 PR 또는 직접 merge로 `main`에 반영한다.
 
 ## 주요 수정 경로
 
@@ -71,4 +69,4 @@ metadata:
 - 요청이 없으면 과한 아키텍처나 추가 서비스를 도입하지 않는다.
 - 작고 되돌리기 쉬운 변경을 우선하고, 이름은 명확하게 유지한다.
 - 의존성은 최소화한다.
-- 역할 worktree에서 `main`으로 직접 push하지 않는다.
+- 변경은 먼저 작업 브랜치에서 검증한 뒤 공유한다.

@@ -22,20 +22,18 @@ metadata:
 - `cd frontend` 후 `npm install`, `npm run dev`를 실행한다.
 - 앱이 로드되고 `/api/rules`를 읽는지 확인한다.
 
-4. git 협업 구성을 확인한다.
-- `git worktree list`에서 planner/backend/frontend/qa worktree를 확인한다.
-- `git branch --list`에서 `role/planner`, `role/backend`, `role/frontend`, `role/qa`를 확인한다.
+4. git 작업 상태를 확인한다.
+- `git branch --show-current`로 현재 브랜치를 확인한다.
+- `git status --short`로 작업 트리가 clean인지 확인한다.
 
 5. push 준비 상태를 확인한다.
-- 역할 브랜치는 최초 1회 `git push -u origin role/<name>`으로 upstream을 설정한다.
+- 작업 브랜치 최초 1회 `git push -u origin <branch-name>`으로 upstream을 설정한다.
 - 새 작업 시작 전 `git status --short`가 clean인지 확인한다.
 
-## Worktree 경로
+## 작업 경로
 
-- Planner: `worktrees/planner`
-- Backend: `worktrees/backend`
-- Frontend: `worktrees/frontend`
-- QA: `worktrees/qa`
+- Backend: `backend`
+- Frontend: `frontend`
 
 ## 빠른 점검
 
@@ -47,4 +45,4 @@ metadata:
 
 - 요청이 없으면 인프라를 추가하지 않는다.
 - 실행 실패 시 먼저 정확한 명령어와 에러를 기록한다.
-- 역할 작업을 `main`에서 commit/push하지 않는다.
+- 기본은 작업 브랜치에서 진행하고, `main` 직접 작업은 필요 시에만 수행한다.

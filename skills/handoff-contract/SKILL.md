@@ -1,18 +1,18 @@
 ﻿---
 name: handoff-contract
-description: 4개 에이전트(기획, 백엔드, 프론트엔드, QA) 간 인수인계를 표준 형식으로 고정한다.
+description: 단일 작업자 기준으로 작업 인수인계/체크포인트 형식을 표준화한다.
 metadata:
   short-description: 에이전트 인수인계 표준
 ---
 
 # 인수인계 계약
 
-에이전트가 작업을 넘길 때, 누락 없이 다음 담당자가 바로 실행할 수 있게 만든다.
+작업을 이어서 진행할 때, 누락 없이 다음 세션에서 바로 실행할 수 있게 만든다.
 
 ## 사용 시점
 
-- 한 에이전트가 task를 끝내고 다른 에이전트로 전달할 때
-- 병렬 작업 중 의존 관계가 생겨 전달이 필요할 때
+- 세션 종료 전 현재 상태를 체크포인트로 남길 때
+- 다음 날/다음 세션에서 작업을 이어갈 때
 
 ## 인수인계 템플릿
 
@@ -20,8 +20,8 @@ metadata:
 
 ```md
 [Handoff]
-- from: <role/planner|role/backend|role/frontend|role/qa>
-- to: <role/planner|role/backend|role/frontend|role/qa>
+- from: <현재 세션 또는 작성자>
+- to: <다음 세션 또는 미래의 나>
 - task: <한 줄 설명>
 - branch: <현재 브랜치>
 - commit: <커밋 해시>
@@ -39,7 +39,7 @@ metadata:
 
 ## 필수 규칙
 
-- 인수인계 전에 `git push origin <role-branch>`를 완료한다.
+- 인수인계 전에 `git push origin <current-branch>`를 완료한다.
 - `branch`, `commit`, `files` 3개 항목은 비우지 않는다.
 - API 계약 변경이 있으면 `api-contract`에 필수로 기록한다.
 - 차단 이슈가 있으면 재현 명령을 함께 남긴다.
@@ -48,4 +48,4 @@ metadata:
 
 - 구두/자유형 전달만 하고 task를 종료하지 않는다.
 - 로컬 변경만 있는 상태에서 인수인계하지 않는다.
-- 다음 담당자의 역할 범위를 침범하지 않는다.
+- 체크포인트는 다음 세션에서 바로 실행 가능한 수준으로 작성한다.
