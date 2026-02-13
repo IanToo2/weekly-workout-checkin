@@ -1,50 +1,50 @@
 ﻿---
 name: project-bootstrap
-description: Fast local bootstrap for this toy project (React+TS frontend, Spring backend, PostgreSQL).
+description: 이 토이프로젝트(React+TS, Spring, PostgreSQL)를 빠르게 로컬 실행 상태로 만든다.
 metadata:
-  short-description: Run local stack quickly
+  short-description: 로컬 실행 부트스트랩
 ---
 
-# Project Bootstrap
+# 프로젝트 부트스트랩
 
-Use this skill when starting local development or onboarding.
+개발 시작 전 또는 신규 참여자 온보딩 시 사용한다.
 
-## Steps
+## 단계
 
-1. Start database.
-- Run `docker compose up -d` from repo root.
+1. 데이터베이스를 시작한다.
+- 저장소 루트에서 `docker compose up -d`를 실행한다.
 
-2. Start backend.
-- Run `cd backend` then `mvn spring-boot:run`.
-- Verify `GET /api/health` returns `{"status":"ok"}`.
+2. 백엔드를 시작한다.
+- `cd backend` 후 `mvn spring-boot:run`을 실행한다.
+- `GET /api/health`가 `{"status":"ok"}`를 반환하는지 확인한다.
 
-3. Start frontend.
-- Run `cd frontend` then `npm install` and `npm run dev`.
-- Verify app loads and can read `/api/rules`.
+3. 프론트를 시작한다.
+- `cd frontend` 후 `npm install`, `npm run dev`를 실행한다.
+- 앱이 로드되고 `/api/rules`를 읽는지 확인한다.
 
-4. Confirm git collaboration layout.
-- Run `git worktree list` and verify planner/backend/frontend/qa worktrees exist.
-- Run `git branch --list` and verify `role/planner`, `role/backend`, `role/frontend`, `role/qa`.
+4. git 협업 구성을 확인한다.
+- `git worktree list`에서 planner/backend/frontend/qa worktree를 확인한다.
+- `git branch --list`에서 `role/planner`, `role/backend`, `role/frontend`, `role/qa`를 확인한다.
 
-5. Confirm push readiness.
-- For each role branch, set upstream once: `git push -u origin role/<name>`.
-- Ensure `git status --short` is clean before starting a new task.
+5. push 준비 상태를 확인한다.
+- 역할 브랜치는 최초 1회 `git push -u origin role/<name>`으로 upstream을 설정한다.
+- 새 작업 시작 전 `git status --short`가 clean인지 확인한다.
 
-## Worktree Paths
+## Worktree 경로
 
 - Planner: `worktrees/planner`
 - Backend: `worktrees/backend`
 - Frontend: `worktrees/frontend`
 - QA: `worktrees/qa`
 
-## Quick Checks
+## 빠른 점검
 
 - Backend port: `8080`
 - Frontend port: `5173`
 - PostgreSQL port: `5432`
 
-## Guardrails
+## 가드레일
 
-- Do not add new infra unless asked.
-- If startup fails, report exact command and error first.
-- Do not commit or push from `main` for role tasks.
+- 요청이 없으면 인프라를 추가하지 않는다.
+- 실행 실패 시 먼저 정확한 명령어와 에러를 기록한다.
+- 역할 작업을 `main`에서 commit/push하지 않는다.
