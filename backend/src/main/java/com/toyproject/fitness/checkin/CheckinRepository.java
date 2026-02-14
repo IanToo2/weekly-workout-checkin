@@ -1,4 +1,4 @@
-﻿package com.toyproject.fitness.checkin;
+package com.toyproject.fitness.checkin;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,4 +1,4 @@
-﻿package com.toyproject.fitness.config;
+package com.toyproject.fitness.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

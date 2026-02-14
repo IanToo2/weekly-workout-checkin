@@ -1,4 +1,4 @@
-﻿package com.toyproject.fitness.checkin;
+package com.toyproject.fitness.checkin;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
