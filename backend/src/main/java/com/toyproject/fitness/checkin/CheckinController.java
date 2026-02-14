@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,30 +42,57 @@ public class CheckinController {
     }
 
     @PostMapping("/checkins")
-    public Map<String, Object> createCheckin(@Valid @RequestBody CreateCheckinRequest request) {
+    public ResponseEntity<CreateCheckinResponse> createCheckin(@Valid @RequestBody CreateCheckinRequest request) {
         Checkin created = checkinService.createCheckin(request.groupId(), request.memberId(), request.checkinDate());
-        return Map.of(
-                "id", created.getId(),
-                "groupId", created.getGroupId(),
-                "memberId", created.getMemberId(),
-                "checkinDate", created.getCheckinDate().toString()
+        CreateCheckinResponse response = new CreateCheckinResponse(
+                created.getId(),
+                created.getGroupId(),
+                created.getMemberId(),
+                created.getCheckinDate()
         );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/weekly-status")
-    public WeeklyStatus weeklyStatus(
+    public WeeklyStatusResponse weeklyStatus(
             @RequestParam @NotNull Long groupId,
             @RequestParam @NotNull Long memberId,
             @RequestParam(required = false) LocalDate date
     ) {
         LocalDate targetDate = date == null ? LocalDate.now() : date;
-        return checkinService.getWeeklyStatus(groupId, memberId, targetDate);
+        WeeklyStatus status = checkinService.getWeeklyStatus(groupId, memberId, targetDate);
+        return new WeeklyStatusResponse(
+                status.weekStart(),
+                status.weekEnd(),
+                status.checkinCount(),
+                status.requiredCount(),
+                status.passed(),
+                status.fineKrw()
+        );
     }
 
     public record CreateCheckinRequest(
             @NotNull Long groupId,
             @NotNull Long memberId,
             @NotNull LocalDate checkinDate
+    ) {
+    }
+
+    public record CreateCheckinResponse(
+            Long id,
+            Long groupId,
+            Long memberId,
+            LocalDate checkinDate
+    ) {
+    }
+
+    public record WeeklyStatusResponse(
+            LocalDate weekStart,
+            LocalDate weekEnd,
+            long checkinCount,
+            int requiredCount,
+            boolean passed,
+            int fineKrw
     ) {
     }
 }

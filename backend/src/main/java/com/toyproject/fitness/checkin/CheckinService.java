@@ -22,7 +22,7 @@ public class CheckinService {
     public Checkin createCheckin(@NotNull Long groupId, @NotNull Long memberId, @NotNull LocalDate date) {
         boolean exists = checkinRepository.existsByGroupIdAndMemberIdAndCheckinDate(groupId, memberId, date);
         if (exists) {
-            throw new IllegalStateException("Only one check-in per day is allowed.");
+            throw new DuplicateCheckinException("Only one check-in per day is allowed.");
         }
         return checkinRepository.save(new Checkin(groupId, memberId, date));
     }
