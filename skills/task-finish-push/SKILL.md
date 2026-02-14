@@ -14,6 +14,8 @@ metadata:
 1. 현재 브랜치와 작업 상태를 확인한다.
 - `git branch --show-current`로 현재 브랜치를 확인한다.
 - `git status --short`로 변경 파일을 확인한다.
+- PM이 지정한 worktree 경로/브랜치와 현재 값이 일치하는지 확인한다.
+- PM 할당의 worktree 경로/브랜치 값이 비어 있으면 작업을 중단하고 할당 보완을 요청한다.
 
 2. 변경 범위를 점검한다.
 - `git status --short`를 실행한다.
@@ -38,5 +40,6 @@ metadata:
 ## 가드레일
 
 - 작업 브랜치에서 먼저 commit/push하는 흐름을 우선한다.
+- 지정된 에이전트 worktree 외 경로에서 commit/push하지 않는다.
 - 무관한 변경은 자동 커밋하지 않는다.
 - 커밋 실패 시 실행 명령과 에러를 그대로 보고한다.
