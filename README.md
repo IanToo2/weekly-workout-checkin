@@ -23,9 +23,10 @@ docker compose up -d
 cd backend
 ./mvnw spring-boot:run
 ```
-If `mvnw` is not present in your local setup, use your local Maven install:
+Windows (PowerShell):
 ```bash
-mvn spring-boot:run
+cd backend
+.\mvnw.cmd spring-boot:run
 ```
 
 ## Frontend Run
