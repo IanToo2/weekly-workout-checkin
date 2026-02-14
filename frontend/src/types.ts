@@ -1,4 +1,4 @@
-﻿export type RulesResponse = {
+export type RulesResponse = {
   maxCheckinsPerDay: number;
   requiredCheckinsPerWeek: number;
   weekStartsOn: string;
@@ -8,4 +8,31 @@
 
 export type HealthResponse = {
   status: string;
+};
+
+export type CreateCheckinRequest = {
+  groupId: number;
+  memberId: number;
+  checkinDate: string;
+};
+
+export type CreateCheckinResponse = {
+  id: number;
+  groupId: number;
+  memberId: number;
+  checkinDate: string;
+};
+
+export type WeeklyStatusResponse = {
+  weekStart: string;
+  weekEnd: string;
+  checkinCount: number;
+  requiredCount: number;
+  passed: boolean;
+  fineKrw: number;
+};
+
+export type ApiErrorResponse = {
+  code: string;
+  message: string;
 };
