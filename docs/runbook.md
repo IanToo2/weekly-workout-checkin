@@ -99,6 +99,46 @@ UI 개편 릴리스 전, 아래 체크리스트를 순서대로 검증한다.
 - 사용자 입력/UX 흐름 점검
 - 중복 제출 방지 UI/재시도 로직 확인
 
+4. Backend 기동 실패 - `Unsupported Database` (Flyway)
+- 증상 예시:
+  - `Unsupported Database: PostgreSQL 15.x/16.x`
+- 원인:
+  - Flyway DB 지원 모듈/버전과 실행 DB 버전 불일치
+- 즉시 조치:
+  - 운영/스테이지: Flyway 지원 버전으로 DB 정합성 확인 후 배포 중단
+  - QA 임시 검증: `SPRING_FLYWAY_ENABLED=false`로 앱 기동 (운영 적용 금지)
+- 재발 방지:
+  - `flyway-core`와 PostgreSQL 지원 버전 매트릭스 점검을 PR 체크리스트에 추가
+  - CI에서 Flyway migrate 스모크를 DB 타깃 버전별로 1회 이상 수행
+
+5. Backend 기동 실패 - `Schema-validation: missing table [checkins]`
+- 증상 예시:
+  - `ddl-auto: validate` 상태에서 테이블 검증 실패
+- 원인:
+  - Flyway 미적용 상태에서 스키마가 생성되지 않음
+- 즉시 조치(QA 임시):
+```bash
+cat backend/src/main/resources/db/migration/V1__init.sql \
+  | docker exec -i <postgres-container> psql -U toyuser -d toyproject
+```
+- 재발 방지:
+  - `validate` 모드 환경에서는 마이그레이션 선행 여부를 배포 게이트로 강제
+
+6. Frontend build 실패 (`@rollup/*` optional dependency)
+- 증상 예시:
+  - `Cannot find module @rollup/rollup-linux-x64-gnu`
+  - `npm has a bug related to optional dependencies`
+- 1차 복구:
+```bash
+cd frontend
+rm -rf node_modules
+npm ci
+npm run build
+```
+- 재발 방지:
+  - `package-lock.json` 유지
+  - 로컬/CI 기본 설치를 `npm ci`로 통일
+
 ## Rollback Rules
 
 - 핫픽스 전 릴리스 기준으로 즉시 되돌릴 수 있는 절차를 PR에 명시
