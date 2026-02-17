@@ -8,6 +8,10 @@
 - Git: 2.40+
 - Docker Desktop: WSL integration 활성화
 - Shell: `bash` 또는 `zsh`
+- Java 17
+- Node.js 20 LTS (`frontend/.nvmrc` 기준)
+- npm 10+
+- Docker / Docker Compose
 
 권장 Git 설정(WSL):
 
@@ -80,6 +84,28 @@ npm run build
 npm run dev
 ```
 
+Node 버전 고정(권장):
+```bash
+cd frontend
+nvm use
+```
+
+## Frontend Build Validation (WSL)
+
+아래 순서를 그대로 수행한다.
+```bash
+node -v
+npm -v
+cd frontend
+npm ci
+npm run build
+npm run build
+```
+
+기대 결과:
+- `npm ci` 성공
+- `npm run build` 2회 연속 성공
+
 ## Flyway Operational Baseline (dev/stage/prod)
 
 원칙:
@@ -139,3 +165,18 @@ docker compose down -v
 
 4. Maven Wrapper 실행 오류
 - 실행 권한 확인: `chmod +x backend/mvnw`
+
+5. WSL에서 `@rollup/*` optional dependency 오류
+- 증상 예시:
+  - `Cannot find module @rollup/rollup-linux-x64-gnu`
+  - `npm has a bug related to optional dependencies`
+- 조치 순서:
+```bash
+cd frontend
+rm -rf node_modules
+npm ci
+npm run build
+```
+- 재발 방지:
+  - `package-lock.json`을 항상 커밋하고, 기본 설치는 `npm ci`를 사용
+  - lockfile 갱신이 필요한 변경(의존성 추가/버전 변경)에서만 `npm install` 사용

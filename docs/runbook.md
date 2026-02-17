@@ -79,6 +79,21 @@ curl http://localhost:8080/api/rules
 - 수동 DDL 수행 여부 확인
 - 배포 전후 API 계약 변경 이력(`docs/api.md`) 점검
 
+4. Frontend build 실패 (`@rollup/*` optional dependency)
+- 증상 예시:
+  - `Cannot find module @rollup/rollup-linux-x64-gnu`
+  - `npm has a bug related to optional dependencies`
+- 1차 복구:
+```bash
+cd frontend
+rm -rf node_modules
+npm ci
+npm run build
+```
+- 재발 방지:
+  - `package-lock.json` 유지
+  - 로컬/CI 기본 설치를 `npm ci`로 통일
+
 ## Rollback / Recovery Rules
 
 - 앱 롤백과 DB 롤백은 분리해 판단한다.

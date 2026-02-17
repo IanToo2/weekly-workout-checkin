@@ -116,3 +116,35 @@ ADR은 `docs/adr/NNNN-title.md` 형식을 따른다.
 - 관련 문서 동기화 완료
 - 롤백/리스크가 PR에 명시
 - 담당 오너 승인 완료
+
+## 12. Worktree Discipline (MUST)
+
+- 역할 작업은 전용 worktree에서만 수행:
+  - 경로 규칙: `/tmp/weekly-workout-checkin-<role>-owner`
+  - 브랜치 규칙: `role/<role>-owner` (`origin/main` 기반)
+- 루트 worktree(`/home/<user>/workspace/ToyProject/weekly-workout-checkin`)에서 역할 에이전트 병렬 작업 금지
+- 작업 시작 시 아래를 확인하고 작업 노트/PR에 요약:
+  - `pwd`
+  - `git branch --show-current`
+  - `git status --short -- <role-scope-path>`
+  - `git diff --name-only -- <role-scope-path>`
+- `<role-scope-path>` 기본값:
+  - FE: `frontend`
+  - BE: `backend`
+  - INFRA: `docker-compose.yml docs/setup.md docs/runbook.md`
+  - QA: `docs/runbook.md docs/changelog.md`
+  - PM: `docs`
+
+## 13. Issue Progress Comment Policy (MUST)
+
+- 모든 역할은 이슈 작업 중 진행 상황을 이슈 댓글로 남겨야 한다.
+- 최소 댓글 시점:
+  - 작업 시작 직후(Goal/Scope/Done Criteria/Risks 요약)
+  - 주요 변경 완료 직후(무엇을/어떻게 변경했는지)
+  - 검증 완료 직후(실행한 검증과 결과)
+  - 이슈 종료 직전(커밋/브랜치/변경 파일/리스크)
+- 종료 댓글에는 아래 4개를 반드시 포함:
+  - What
+  - How
+  - Result
+  - Note(남은 리스크/후속 작업)
