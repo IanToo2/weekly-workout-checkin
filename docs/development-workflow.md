@@ -36,6 +36,10 @@ PR 본문 필수 항목:
 - 기본 승인: Code Owner 1명 이상
 - API 계약/경계 변경: 관련 영역 Owner 2명 이상
 - CI green + 필수 검증 통과 전 머지 금지
+- PR 대상 자동 게이트: GitHub Actions `PR Quality Gate`
+  - Backend Test (Maven): `cd backend && ./mvnw test`
+  - Frontend Build (Node): `cd frontend && npm ci && npm run build`
+  - 두 잡 중 하나라도 실패하면 PR 체크 실패
 
 ## Required Validation
 
