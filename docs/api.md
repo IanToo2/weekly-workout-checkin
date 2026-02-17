@@ -73,6 +73,22 @@ Content-Type: `application/json`
 }
 ```
 
+오류 응답 (400, 존재하지 않는 groupId):
+```json
+{
+  "code": "GROUP_NOT_FOUND",
+  "message": "Group not found: 999"
+}
+```
+
+오류 응답 (400, 존재하지 않는 memberId):
+```json
+{
+  "code": "MEMBER_NOT_FOUND",
+  "message": "Member not found: 999"
+}
+```
+
 오류 응답 (400, 검증 실패 예시):
 ```json
 {
@@ -118,4 +134,6 @@ GET /api/weekly-status?groupId=1&memberId=100&date=2026-02-17
 ## Error Codes
 
 - `DUPLICATE_CHECKIN`: 동일 `groupId` + `memberId` + `checkinDate`가 이미 존재
+- `GROUP_NOT_FOUND`: `groupId`가 `groups.id`에 존재하지 않음
+- `MEMBER_NOT_FOUND`: `memberId`가 `members.id`에 존재하지 않음
 - `VALIDATION_ERROR`: 요청 파라미터/본문 형식 또는 제약 위반

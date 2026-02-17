@@ -3,6 +3,9 @@ package com.toyproject.fitness.checkin;
 import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Optional;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,11 @@ public class CheckinService {
         if (exists) {
             throw new DuplicateCheckinException("Only one check-in per day is allowed.");
         }
-        return checkinRepository.save(new Checkin(groupId, memberId, date));
+        try {
+            return checkinRepository.save(new Checkin(groupId, memberId, date));
+        } catch (DataIntegrityViolationException ex) {
+            throw mapToDomainException(ex, groupId, memberId);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -36,5 +43,31 @@ public class CheckinService {
         boolean passed = checkinCount >= REQUIRED_WEEKLY_COUNT;
         int fine = passed ? 0 : WEEKLY_FINE_KRW;
         return new WeeklyStatus(weekStart, weekEnd, checkinCount, REQUIRED_WEEKLY_COUNT, passed, fine);
+    }
+
+    private RuntimeException mapToDomainException(DataIntegrityViolationException ex, Long groupId, Long memberId) {
+        String constraintName = findConstraintName(ex).map(String::toLowerCase).orElse("");
+
+        if (constraintName.contains("fk_checkins_group")) {
+            return new GroupNotFoundException("Group not found: " + groupId);
+        }
+        if (constraintName.contains("fk_checkins_member")) {
+            return new MemberNotFoundException("Member not found: " + memberId);
+        }
+        if (constraintName.contains("uk_checkins_group_member_date")) {
+            return new DuplicateCheckinException("Only one check-in per day is allowed.");
+        }
+        return ex;
+    }
+
+    private Optional<String> findConstraintName(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (current instanceof ConstraintViolationException constraintViolationException) {
+                return Optional.ofNullable(constraintViolationException.getConstraintName());
+            }
+            current = current.getCause();
+        }
+        return Optional.empty();
     }
 }
