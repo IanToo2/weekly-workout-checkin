@@ -53,6 +53,8 @@ Content-Type: `application/json`
 }
 ```
 
+`memberId`는 DB의 `members.id`(PK)를 의미한다.
+
 성공 응답 (201):
 ```json
 {
@@ -85,7 +87,7 @@ Content-Type: `application/json`
 
 Query Parameters:
 - `groupId` (required, number)
-- `memberId` (required, number)
+- `memberId` (required, number, DB `members.id`)
 - `date` (optional, `YYYY-MM-DD`)
 
 요청 예시:

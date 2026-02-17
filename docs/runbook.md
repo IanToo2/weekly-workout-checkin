@@ -1,69 +1,126 @@
 # Runbook
 
-이 문서는 운영/개발 환경에서 자주 발생하는 이슈의 1차 대응 절차를 제공한다.
+이 문서는 PostgreSQL/Flyway 운영 기준과 장애 대응 절차를 정의한다.
 
-## Incident Response Flow
+## Ownership and Responsibility
 
-1. 증상 수집
-- 사용자 영향 범위 확인
-- 발생 시각/재현 조건 기록
+| 영역 | Primary Owner | Backup | 책임 |
+| --- | --- | --- | --- |
+| DB 운영(PostgreSQL) | Platform/Infra Owner | 지정 Backup | 인스턴스 상태, 접속 정책, 백업/복구 |
+| 마이그레이션(Flyway) | Platform/Infra Owner | 지정 Backup | 버전 배포 순서, 실패 대응, 승인 게이트 |
+| API 계약 영향 검증 | FE Owner + BE Owner | 각 Backup | 마이그레이션으로 인한 계약/타입 영향 점검 |
 
-2. 기본 상태 확인
-- DB/Backend/Frontend 프로세스 상태 확인
-- 최근 변경(PR/커밋) 확인
+## Flyway Execution Strategy
 
-3. 원인 분류
-- 인프라(포트, DB, 네트워크)
-- 애플리케이션(예외, 계약 불일치)
-- 데이터(중복/누락)
+원칙:
 
-4. 임시 완화 또는 롤백
-- 서비스 영향 최소화 우선
+- `stage`, `prod`는 CI에서만 Flyway를 실행한다.
+- 애플리케이션 시작 시점 자동 마이그레이션은 운영 기준에서 제외한다.
+- 배포 순서는 `Flyway 성공 -> Backend 배포 -> Smoke Test`를 강제한다.
 
-5. 사후 기록
-- 원인/조치/재발방지 항목 문서화
+권장 파이프라인 순서:
+
+1. `flyway validate`
+2. `flyway migrate`
+3. Backend 배포
+4. `GET /api/health` 확인
+5. 핵심 API 스모크 테스트
+
+실패 대응:
+
+- `validate` 실패: 배포 중단, 누락/변경된 마이그레이션 파일 복구
+- `migrate` 실패: 즉시 배포 중단, 롤포워드/복구 SQL 결정 후 재실행
+
+## Environment Baseline
+
+| Environment | DB 버전 | 실행 주체 | 변경 정책 | 비고 |
+| --- | --- | --- | --- | --- |
+| dev | PostgreSQL 16 | 개발자/CI | 파손 시 재구성 허용 | 로컬 재현 우선 |
+| stage | PostgreSQL 16 | CI + Platform 승인 | 수동 DDL 금지 | prod 사전 검증 |
+| prod | PostgreSQL 16 | CI + Platform 승인 | 수동 DDL 금지 | 변경 이력 추적 필수 |
+
+충돌 방지 가이드:
+
+- `stage`/`prod` DB에는 직접 SQL 콘솔 변경을 금지한다.
+- 스키마 변경은 PR 기반 마이그레이션으로만 반영한다.
+- 동일 버전 마이그레이션 수정 대신 신규 버전 추가를 사용한다.
 
 ## Quick Checks
 
-1. DB 확인
+1. DB 컨테이너 상태
+
 ```bash
 docker ps
 ```
 
-2. Backend health 확인
+2. Backend 헬스체크
+
 ```bash
 curl http://localhost:8080/api/health
 ```
 
-3. Rules API 확인
+3. 규칙 API 확인
+
 ```bash
 curl http://localhost:8080/api/rules
 ```
 
-## Common Symptoms
+## Common Symptoms and First Response
 
 1. `/api/health` 실패
-- Backend 미기동 또는 포트 충돌 가능
-- `backend` 실행 로그 확인
+- Backend 미기동 또는 포트 충돌 확인
+- 최근 배포/마이그레이션 실패 여부 확인
 
-2. `VALIDATION_ERROR` 증가
-- FE 요청 파라미터/바디 변경 여부 확인
-- 최근 API 계약 변경 여부 확인
+2. 배포 직후 DB 관련 예외 증가
+- 마지막 Flyway 실행 로그 확인
+- `stage`와 `prod` 적용 버전 일치 여부 확인
 
-3. `DUPLICATE_CHECKIN` 다수 발생
-- 사용자 입력/UX 흐름 점검
-- 중복 제출 방지 UI/재시도 로직 확인
+3. 데이터 정합성 이슈
+- 수동 DDL 수행 여부 확인
+- 배포 전후 API 계약 변경 이력(`docs/api.md`) 점검
 
-## Rollback Rules
+4. WSL에서 `cd backend && ./mvnw test` 실패
+- 증상: `^M` 관련 셸 오류 또는 `permission denied: ./mvnw`
+- 원인:
+  - `backend/mvnw` CRLF 줄바꿈
+  - `backend/mvnw` 실행 권한 누락
+- 즉시 조치:
+  - `sed -n '1,20p' backend/mvnw | cat -vet`로 `^M` 확인
+  - `chmod +x backend/mvnw`
+- 재발 방지:
+  - `.gitattributes`에 `mvnw text eol=lf` 유지
+  - PR 검증에 `file backend/mvnw` 확인 포함
 
-- 핫픽스 전 릴리스 기준으로 즉시 되돌릴 수 있는 절차를 PR에 명시
-- 롤백 시 데이터 영향(이미 저장된 체크인 데이터) 여부를 별도로 기록
+5. Frontend build 실패 (`@rollup/*` optional dependency)
+- 증상 예시:
+  - `Cannot find module @rollup/rollup-linux-x64-gnu`
+  - `npm has a bug related to optional dependencies`
+- 1차 복구:
+```bash
+cd frontend
+rm -rf node_modules
+npm ci
+npm run build
+```
+- 재발 방지:
+  - `package-lock.json` 유지
+  - 로컬/CI 기본 설치를 `npm ci`로 통일
+
+## Rollback / Recovery Rules
+
+- 앱 롤백과 DB 롤백은 분리해 판단한다.
+- 파괴적 마이그레이션이 포함된 경우 앱만 롤백하지 않는다.
+- 복구 전략은 PR에 사전 기록한다.
+  - Roll-forward SQL
+  - 백업 복구 절차
+  - 서비스 영향 범위
 
 ## Postmortem Minimum
 
-사후 문서에는 최소 아래를 포함한다.
+사후 기록은 최소 아래를 포함한다.
+
 - Incident summary
 - Timeline
 - Root cause
 - Customer impact
-- Corrective actions
+- Corrective actions (테스트/모니터링/가드레일 1개 이상)
