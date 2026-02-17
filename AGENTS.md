@@ -6,8 +6,7 @@
 
 5인 시니어 팀 기준 역할 분리:
 - FE Owner (Primary 1, Backup 1)
-- BE Owner A (Primary)
-- BE Owner B (Primary)
+- BE Owner (Primary)
 - Platform/Infra Owner (Primary)
 - QA/Release Owner (Primary)
 
