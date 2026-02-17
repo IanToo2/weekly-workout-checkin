@@ -10,6 +10,53 @@
 - `docs/<topic>`: 문서 작업
 - `hotfix/<topic>`: 긴급 수정
 
+## Role Worktree Standard (MUST)
+
+역할별 에이전트는 전용 worktree만 사용한다.
+
+- Root worktree(사람 작업 기준): `/home/<user>/workspace/ToyProject/weekly-workout-checkin`
+- Role worktree 경로 규칙: `/tmp/weekly-workout-checkin-<role>-owner`
+- Role 브랜치 규칙: `role/<role>-owner`
+- 생성 기준 브랜치: `origin/main`
+
+표준 생성 예시:
+```bash
+git fetch origin
+git worktree add /tmp/weekly-workout-checkin-frontend-owner -b role/frontend-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-backend-owner -b role/backend-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-infra-owner -b role/infra-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-pm-owner -b role/pm-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-qa-owner -b role/qa-owner origin/main
+```
+
+금지 사항:
+- 전용 worktree가 아닌 경로에서 역할 작업 수행 금지
+- Root worktree에서 에이전트 병렬 작업 금지
+- 동일 파일 동시 수정 금지(사전 담당자 지정 필수)
+
+작업 시작 체크(필수):
+```bash
+pwd
+git branch --show-current
+git status --short -- <role-scope-path>
+git diff --name-only -- <role-scope-path>
+```
+
+작업 종료 체크(필수):
+```bash
+git status --short -- <role-scope-path>
+git diff --name-only -- <role-scope-path>
+```
+
+역할별 `<role-scope-path>` 예시:
+- FE: `frontend`
+- BE: `backend`
+- INFRA: `docker-compose.yml docs/setup.md docs/runbook.md`
+- QA: `docs/runbook.md docs/changelog.md`
+- PM: `docs`
+
+PR 또는 작업 보고에는 시작/종료 체크 결과를 요약 포함한다.
+
 ## Commit Convention
 
 커밋 메시지 형식:

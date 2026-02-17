@@ -116,3 +116,21 @@ ADR은 `docs/adr/NNNN-title.md` 형식을 따른다.
 - 관련 문서 동기화 완료
 - 롤백/리스크가 PR에 명시
 - 담당 오너 승인 완료
+
+## 12. Worktree Discipline (MUST)
+
+- 역할 작업은 전용 worktree에서만 수행:
+  - 경로 규칙: `/tmp/weekly-workout-checkin-<role>-owner`
+  - 브랜치 규칙: `role/<role>-owner` (`origin/main` 기반)
+- 루트 worktree(`/home/<user>/workspace/ToyProject/weekly-workout-checkin`)에서 역할 에이전트 병렬 작업 금지
+- 작업 시작 시 아래를 확인하고 작업 노트/PR에 요약:
+  - `pwd`
+  - `git branch --show-current`
+  - `git status --short -- <role-scope-path>`
+  - `git diff --name-only -- <role-scope-path>`
+- `<role-scope-path>` 기본값:
+  - FE: `frontend`
+  - BE: `backend`
+  - INFRA: `docker-compose.yml docs/setup.md docs/runbook.md`
+  - QA: `docs/runbook.md docs/changelog.md`
+  - PM: `docs`
