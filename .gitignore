@@ -4,6 +4,7 @@ frontend/dist/
 
 # backend
 backend/target/
+backend/.m2/
 backend/.tools/
 backend/backend-server.log
 backend/backend-server.err
