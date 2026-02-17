@@ -21,6 +21,18 @@ public class ApiExceptionHandler {
                 .body(new ApiErrorResponse("DUPLICATE_CHECKIN", ex.getMessage()));
     }
 
+    @ExceptionHandler(GroupNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleGroupNotFound(GroupNotFoundException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ApiErrorResponse("GROUP_NOT_FOUND", ex.getMessage()));
+    }
+
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleMemberNotFound(MemberNotFoundException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ApiErrorResponse("MEMBER_NOT_FOUND", ex.getMessage()));
+    }
+
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             ConstraintViolationException.class,
