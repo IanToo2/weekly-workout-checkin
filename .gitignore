@@ -4,6 +4,9 @@ frontend/dist/
 
 # backend
 backend/target/
+backend/.tools/
+backend/backend-server.log
+backend/backend-server.err
 
 # IDE / OS
 .vscode/
