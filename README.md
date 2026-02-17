@@ -23,9 +23,11 @@ cd backend
 3. Frontend 실행 (Vite)
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
+
+의존성 추가/버전 변경으로 lockfile 갱신이 필요할 때만 `npm install`을 사용하고, 기본 설치는 `npm ci`를 사용합니다. 상세 기준은 `docs/setup.md`를 따릅니다.
 
 ## Documentation Index
 
