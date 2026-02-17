@@ -30,9 +30,8 @@ assignees: []
 - [ ] docs 업데이트 필요 없음
 - [ ] docs 업데이트 필요 있음 (수정 파일: )
 
-## Owner / Reviewers
+## Owner
 - Owner:
-- Required Reviewer(s):
 
 ## Notes
 <!-- 의사결정/제약/참고 링크 -->

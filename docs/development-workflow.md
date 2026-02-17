@@ -1,6 +1,6 @@
 # Development Workflow
 
-이 문서는 팀 공통 개발/리뷰/머지 절차를 정의한다.
+이 문서는 팀 공통 개발/머지 절차를 정의한다.
 
 ## Branch Naming
 
@@ -22,8 +22,8 @@
 표준 생성 예시:
 ```bash
 git fetch origin
-git worktree add /tmp/weekly-workout-checkin-frontend-owner -b role/frontend-owner origin/main
-git worktree add /tmp/weekly-workout-checkin-backend-owner -b role/backend-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-fe-owner -b role/fe-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-be-owner -b role/be-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-infra-owner -b role/infra-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-pm-owner -b role/pm-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-qa-owner -b role/qa-owner origin/main
@@ -93,10 +93,8 @@ PR 본문 필수 항목:
   - `Result`
   - `Note`
 
-## Review and Merge Gate
+## Merge Gate
 
-- 기본 승인: Code Owner 1명 이상
-- API 계약/경계 변경: 관련 영역 Owner 2명 이상
 - CI green + 필수 검증 통과 전 머지 금지
 - PR 대상 자동 게이트: GitHub Actions `PR Quality Gate`
   - Backend Test (Maven): `cd backend && ./mvnw test`
