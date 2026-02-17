@@ -54,6 +54,18 @@ curl http://localhost:8080/api/rules
 - 사용자 입력/UX 흐름 점검
 - 중복 제출 방지 UI/재시도 로직 확인
 
+4. WSL에서 `cd backend && ./mvnw test` 실패
+- 증상: `^M` 관련 셸 오류 또는 `permission denied: ./mvnw`
+- 원인:
+  - `backend/mvnw` CRLF 줄바꿈
+  - `backend/mvnw` 실행 권한 누락
+- 즉시 조치:
+  - `sed -n '1,20p' backend/mvnw | cat -vet`로 `^M` 확인
+  - `chmod +x backend/mvnw`
+- 재발 방지:
+  - `.gitattributes`에 `backend/mvnw text eol=lf` 유지
+  - PR 검증에 `file backend/mvnw` 확인 포함
+
 ## Rollback Rules
 
 - 핫픽스 전 릴리스 기준으로 즉시 되돌릴 수 있는 절차를 PR에 명시
