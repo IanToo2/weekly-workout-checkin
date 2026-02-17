@@ -4,6 +4,21 @@ import type { CreateCheckinResponse, RulesResponse, WeeklyStatusResponse } from 
 
 type ViewState = "loading" | "success" | "error" | "empty";
 
+function getCheckinErrorMessage(error: ApiRequestError): string {
+  switch (error.code) {
+    case "DUPLICATE_CHECKIN":
+      return error.message;
+    case "GROUP_NOT_FOUND":
+      return "존재하지 않는 groupId입니다. 그룹 정보를 확인해 주세요.";
+    case "MEMBER_NOT_FOUND":
+      return "존재하지 않는 memberId입니다. 멤버 정보를 확인해 주세요.";
+    case "VALIDATION_ERROR":
+      return "입력값 형식을 확인해 주세요.";
+    default:
+      return error.message || "체크인 등록에 실패했습니다.";
+  }
+}
+
 function App() {
   const [health, setHealth] = useState<string>("");
   const [rules, setRules] = useState<RulesResponse | null>(null);
@@ -67,8 +82,8 @@ function App() {
       setCheckinMessage(`체크인 등록 완료 (id: ${result.id})`);
     } catch (error) {
       setCheckinState("error");
-      if (error instanceof ApiRequestError && error.status === 409) {
-        setCheckinMessage(error.message);
+      if (error instanceof ApiRequestError) {
+        setCheckinMessage(getCheckinErrorMessage(error));
         return;
       }
       const message = error instanceof Error ? error.message : "체크인 등록에 실패했습니다.";
