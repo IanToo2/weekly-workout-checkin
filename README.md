@@ -35,6 +35,7 @@ npm run dev
 - 도메인 규칙: `docs/rules.md`
 - 개발 워크플로/PR 규칙: `docs/development-workflow.md`
 - 운영 대응 런북: `docs/runbook.md`
+- UI 개편 기능 정의(Phase 1): `docs/ui-revamp-service-definition.md`
 - ADR 가이드: `docs/adr/README.md`
 - 문서 변경 이력: `docs/changelog.md`
 - 에이전트/개발 작업 규약: `AGENTS.md`
