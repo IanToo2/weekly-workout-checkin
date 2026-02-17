@@ -32,7 +32,13 @@ export type WeeklyStatusResponse = {
   fineKrw: number;
 };
 
+export type ApiErrorCode =
+  | "DUPLICATE_CHECKIN"
+  | "GROUP_NOT_FOUND"
+  | "MEMBER_NOT_FOUND"
+  | "VALIDATION_ERROR";
+
 export type ApiErrorResponse = {
-  code: string;
+  code: ApiErrorCode | string;
   message: string;
 };

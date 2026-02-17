@@ -37,12 +37,28 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   const payload = isJson ? ((await response.json()) as unknown) : null;
 
   if (!response.ok) {
-    const apiError = payload as ApiErrorResponse | null;
+    const apiError = parseApiErrorResponse(payload);
     const message = apiError?.message ?? `Request failed: ${response.status}`;
     throw new ApiRequestError(response.status, message, apiError?.code);
   }
 
   return payload as T;
+}
+
+function parseApiErrorResponse(payload: unknown): ApiErrorResponse | null {
+  if (!payload || typeof payload !== "object") {
+    return null;
+  }
+
+  const candidate = payload as Partial<ApiErrorResponse>;
+  if (typeof candidate.code !== "string" || typeof candidate.message !== "string") {
+    return null;
+  }
+
+  return {
+    code: candidate.code,
+    message: candidate.message,
+  };
 }
 
 export const getHealth = () => request<HealthResponse>("/api/health");
