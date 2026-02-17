@@ -119,6 +119,7 @@ ADR은 `docs/adr/NNNN-title.md` 형식을 따른다.
 ## 12. Worktree Discipline (MUST)
 
 - 역할 작업은 전용 worktree에서만 수행:
+  - `<role>` 토큰 표준: `fe`, `be`, `infra`, `qa`, `pm`
   - 경로 규칙: `/tmp/weekly-workout-checkin-<role>-owner`
   - 브랜치 규칙: `role/<role>-owner` (`origin/main` 기반)
 - 루트 worktree(`/home/<user>/workspace/ToyProject/weekly-workout-checkin`)에서 역할 에이전트 병렬 작업 금지

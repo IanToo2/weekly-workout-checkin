@@ -22,8 +22,8 @@
 표준 생성 예시:
 ```bash
 git fetch origin
-git worktree add /tmp/weekly-workout-checkin-frontend-owner -b role/frontend-owner origin/main
-git worktree add /tmp/weekly-workout-checkin-backend-owner -b role/backend-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-fe-owner -b role/fe-owner origin/main
+git worktree add /tmp/weekly-workout-checkin-be-owner -b role/be-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-infra-owner -b role/infra-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-pm-owner -b role/pm-owner origin/main
 git worktree add /tmp/weekly-workout-checkin-qa-owner -b role/qa-owner origin/main
