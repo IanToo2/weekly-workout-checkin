@@ -17,7 +17,7 @@
 - `frontend/**`: UI, 화면 상태, API client, 타입
 - `backend/**`: API, 도메인 로직, 영속성, 예외 처리
 - `docker-compose.yml` 및 실행/배포 인프라: Platform/Infra Owner 승인 필수
-- 경계 넘는 변경(예: API 계약 변경)은 FE+BE 양측 리뷰 필수
+- 경계 넘는 변경(예: API 계약 변경)은 FE+BE 양측 영향 검토 필수
 
 ## 3. Start-of-Work Contract (MUST)
 
@@ -27,7 +27,7 @@
 - Done Criteria
 - Risks
 
-작업 범위 밖 변경이 필요하면 사유를 먼저 기록하고 리뷰어 동의를 받는다.
+작업 범위 밖 변경이 필요하면 사유를 먼저 기록하고 영향 범위를 명시한다.
 
 ## 4. Source of Truth
 
@@ -45,8 +45,6 @@
 - 머지 전 필수:
   - CI green
   - 필수 검증 통과
-  - 코드 오너 승인 1+
-  - 경계/계약 변경 시 관련 오너 승인 2+
 
 ## 6. Validation Gate (MUST)
 
@@ -114,7 +112,7 @@ ADR은 `docs/adr/NNNN-title.md` 형식을 따른다.
 - 필수 검증 통과
 - 관련 문서 동기화 완료
 - 롤백/리스크가 PR에 명시
-- 담당 오너 승인 완료
+- 담당 오너 확인 완료
 
 ## 12. Worktree Discipline (MUST)
 
