@@ -40,6 +40,51 @@ curl http://localhost:8080/api/health
 curl http://localhost:8080/api/rules
 ```
 
+## UI Revamp Regression Checklist
+
+UI 개편 릴리스 전, 아래 체크리스트를 순서대로 검증한다.
+
+### Preconditions
+
+- Backend `http://localhost:8080` 정상 기동 (`/api/health` 응답 확인)
+- Frontend 최신 빌드 성공 (`cd frontend && npm run build`)
+- 검증 기준 날짜를 기록 (예: `2026-02-17`)
+
+### Scenario Checklist
+
+1. 오늘 체크인 성공
+- 입력: 유효한 `groupId`, `memberId`, `checkinDate=today`
+- 기대 결과: 성공 메시지 표시, 등록된 `id/groupId/memberId/checkinDate` 확인
+
+2. 오늘 체크인 실패 - 중복
+- 입력: 같은 `groupId/memberId/checkinDate`로 재요청
+- 기대 결과: `DUPLICATE_CHECKIN` 또는 중복 안내 메시지 표시
+
+3. 오늘 체크인 실패 - 잘못된 ID
+- 입력: 비정상 ID(빈 값, 문자열, 파라미터 누락 또는 타입 오류)
+- 기대 결과: `VALIDATION_ERROR` 또는 입력 오류 메시지 표시
+
+4. 주간 리포트 조회 성공
+- 입력: 유효한 `groupId/memberId` (+ 필요 시 `date`)
+- 기대 결과: `weekStart/weekEnd/checkinCount/requiredCount/passed/fineKrw` 정상 렌더링
+
+5. 주간 리포트 조회 실패
+- 입력: 잘못된 query 파라미터(누락/타입 오류)
+- 기대 결과: `VALIDATION_ERROR` 또는 조회 실패 메시지 표시
+
+6. 설정 저장 후 재접속 복원
+- 입력: 사용자 설정 변경 후 저장, 페이지 새로고침/재접속
+- 기대 결과: 저장한 설정이 복원됨 (예: localStorage 기반 persistence)
+
+### Evidence Template (Issue Comment)
+
+- Scenario:
+- Steps to Reproduce:
+- Expected:
+- Actual:
+- Evidence: 로그/스크린샷/명령 출력
+- Result: PASS / FAIL / BLOCKED
+
 ## Common Symptoms
 
 1. `/api/health` 실패
