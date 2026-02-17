@@ -7,6 +7,7 @@
 - Frontend: React + TypeScript (Vite)
 - Backend: Spring Boot 3 (Java 17)
 - Database: PostgreSQL 16
+- Schema migration: Flyway (`backend/src/main/resources/db/migration`)
 
 사용자는 Frontend에서 체크인 등록/주간 상태 조회를 수행하고, Backend는 규칙 검증 및 데이터 저장/집계를 담당한다.
 
@@ -38,6 +39,7 @@
   - 일관된 에러 응답(`code`, `message`)
 - Database 책임
   - 체크인 데이터 영속화
+  - Flyway 마이그레이션 기반 스키마 변경 이력 관리
 
 ## Current Functional Surface
 
@@ -47,3 +49,20 @@
 - Weekly Status 조회
 
 세부 계약은 `docs/api.md`, 규칙 설명은 `docs/rules.md`를 따른다.
+
+## Data Model (v1)
+
+- `groups`
+  - PK: `id`
+  - 주요 필드: `name`, `weekly_fine_krw`(default `10000`), `timezone`(default `Asia/Seoul`)
+- `members`
+  - PK: `id`
+  - 체크인 API의 `memberId`는 `members.id`를 의미
+- `group_members`
+  - PK: (`group_id`, `member_id`)
+  - 그룹-멤버 소속 관계 저장
+- `checkins`
+  - PK: `id`
+  - FK: `group_id -> groups.id`, `member_id -> members.id`
+  - UNIQUE: (`group_id`, `member_id`, `checkin_date`)
+  - 인덱스: 주간 조회 최적화를 위한 `idx_checkins_weekly_status (group_id, checkin_date, member_id)`

@@ -79,7 +79,19 @@ curl http://localhost:8080/api/rules
 - 수동 DDL 수행 여부 확인
 - 배포 전후 API 계약 변경 이력(`docs/api.md`) 점검
 
-4. Frontend build 실패 (`@rollup/*` optional dependency)
+4. WSL에서 `cd backend && ./mvnw test` 실패
+- 증상: `^M` 관련 셸 오류 또는 `permission denied: ./mvnw`
+- 원인:
+  - `backend/mvnw` CRLF 줄바꿈
+  - `backend/mvnw` 실행 권한 누락
+- 즉시 조치:
+  - `sed -n '1,20p' backend/mvnw | cat -vet`로 `^M` 확인
+  - `chmod +x backend/mvnw`
+- 재발 방지:
+  - `.gitattributes`에 `mvnw text eol=lf` 유지
+  - PR 검증에 `file backend/mvnw` 확인 포함
+
+5. Frontend build 실패 (`@rollup/*` optional dependency)
 - 증상 예시:
   - `Cannot find module @rollup/rollup-linux-x64-gnu`
   - `npm has a bug related to optional dependencies`
