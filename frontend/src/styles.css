@@ -37,10 +37,30 @@ body {
   color: #4b5563;
 }
 
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.tab.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
 .action-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
+}
+
+.quick-checkin {
+  border: 1px solid #bfdbfe;
 }
 
 h2 {
@@ -84,7 +104,12 @@ button {
 
 button:disabled {
   opacity: 0.7;
-  cursor: wait;
+  cursor: not-allowed;
+}
+
+button.ghost {
+  background: #e5e7eb;
+  color: #1f2937;
 }
 
 .state {
@@ -109,10 +134,37 @@ button:disabled {
   color: #6b7280;
 }
 
+.meta {
+  margin: 8px 0 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.hint {
+  margin-top: 10px;
+  color: #1d4ed8;
+  font-size: 14px;
+}
+
 .error {
   color: #b91c1c;
 }
 
 .result p {
   margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 20px 14px 28px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }
