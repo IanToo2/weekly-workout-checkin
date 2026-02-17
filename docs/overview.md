@@ -50,6 +50,16 @@
 
 세부 계약은 `docs/api.md`, 규칙 설명은 `docs/rules.md`를 따른다.
 
+## UI Revamp Target (Phase 1)
+
+- 사용자 기준: 운동 참여자(Primary)
+- 1순위 플로우: 오늘 체크인 빠른 완료
+- 화면 정보구조:
+  - Home / Quick Check-in
+  - Weekly Report
+  - Settings (local context)
+- 세부 기능 정의는 `docs/ui-revamp-service-definition.md`를 따른다.
+
 ## Data Model (v1)
 
 - `groups`
