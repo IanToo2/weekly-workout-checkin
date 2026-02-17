@@ -134,3 +134,17 @@ ADR은 `docs/adr/NNNN-title.md` 형식을 따른다.
   - INFRA: `docker-compose.yml docs/setup.md docs/runbook.md`
   - QA: `docs/runbook.md docs/changelog.md`
   - PM: `docs`
+
+## 13. Issue Progress Comment Policy (MUST)
+
+- 모든 역할은 이슈 작업 중 진행 상황을 이슈 댓글로 남겨야 한다.
+- 최소 댓글 시점:
+  - 작업 시작 직후(Goal/Scope/Done Criteria/Risks 요약)
+  - 주요 변경 완료 직후(무엇을/어떻게 변경했는지)
+  - 검증 완료 직후(실행한 검증과 결과)
+  - 이슈 종료 직전(커밋/브랜치/변경 파일/리스크)
+- 종료 댓글에는 아래 4개를 반드시 포함:
+  - What
+  - How
+  - Result
+  - Note(남은 리스크/후속 작업)

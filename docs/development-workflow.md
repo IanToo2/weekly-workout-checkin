@@ -78,6 +78,21 @@ PR 본문 필수 항목:
 - Validation Results
 - Docs Sync 여부
 
+## Issue Comment Rules (MUST)
+
+모든 역할은 이슈 진행 내용을 댓글로 기록한다.
+
+- 필수 댓글 시점:
+  - 시작: Goal/Scope/Done Criteria/Risks
+  - 구현: 핵심 변경 사항(What/How)
+  - 검증: 실행 명령 및 결과
+  - 종료: 커밋/브랜치/변경 파일 + 리스크/후속
+- 종료 댓글 최소 템플릿:
+  - `What`
+  - `How`
+  - `Result`
+  - `Note`
+
 ## Review and Merge Gate
 
 - 기본 승인: Code Owner 1명 이상
