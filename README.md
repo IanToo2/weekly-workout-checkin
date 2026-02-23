@@ -1,59 +1,80 @@
 # Weekly Workout Check-in
 
-소그룹 운동 체크인을 기록하고 주간 목표 달성 여부를 확인하는 토이 프로젝트입니다.
+A small service to record daily workout check-ins and track weekly goal completion.
 
-## Quick Start
+## Runtime Direction
 
-1. PostgreSQL 실행
+- Database: Supabase Postgres (managed external DB)
+- App runtime: Docker Compose (`frontend` + `backend`)
+- API base path: `/api`
+
+## Quick Start (Supabase + Docker)
+
+1. Create a Supabase project and collect DB connection values.
+2. Create `.env` in the repository root.
+
 ```bash
-docker compose up -d
+cp .env.example .env
 ```
 
-2. Backend 실행 (Spring Boot)
+3. Fill `.env` with real values.
+
+```env
+DB_URL=jdbc:postgresql://db.<project-ref>.supabase.co:5432/postgres?sslmode=require
+DB_USERNAME=postgres.<project-ref>
+DB_PASSWORD=<your-db-password>
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+```
+
+4. Start services.
+
+```bash
+docker compose up --build
+```
+
+5. Open endpoints.
+- Frontend: `http://localhost:5173`
+- Backend health: `http://localhost:8080/api/health`
+
+## Local Development (optional)
+
+Backend:
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
-Windows (PowerShell):
-```bash
-cd backend
-.\mvnw.cmd spring-boot:run
-```
 
-3. Frontend 실행 (Vite)
+Frontend:
+
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
-## Documentation Index
+## Validation Gate
 
-- 프로젝트 개요/구조: `docs/overview.md`
-- 로컬 환경/실행/트러블슈팅: `docs/setup.md`
-- API 계약(요청/응답 예시): `docs/api.md`
-- 도메인 규칙: `docs/rules.md`
-- 개발 워크플로/PR 규칙: `docs/development-workflow.md`
-- 운영 대응 런북: `docs/runbook.md`
-- UI 개편 기능 정의(Phase 1): `docs/ui-revamp-service-definition.md`
-- ADR 가이드: `docs/adr/README.md`
-- 문서 변경 이력: `docs/changelog.md`
-- 에이전트/개발 작업 규약: `AGENTS.md`
+Backend changes:
 
-## Current Scope
+```bash
+cd backend
+./mvnw test
+```
 
-현재 구현된 API:
-- `GET /api/health`
-- `GET /api/rules`
-- `POST /api/checkins`
-- `GET /api/weekly-status`
+Frontend changes:
 
-도메인 핵심 규칙:
-- 1일 1회 체크인
-- 주간 목표 3회
-- 주간 미달 시 벌금 KRW 10,000
+```bash
+cd frontend
+npm run build
+```
 
-## Notes
+## Documentation
 
-- `skills/` 디렉터리는 애플리케이션 사용자 문서가 아니라 내부 작업 스킬 문서입니다.
-- 상세 설명은 README에 중복 작성하지 않고 `docs/`를 단일 상세 문서 경로로 사용합니다.
+- Architecture: `docs/overview.md`
+- Setup: `docs/setup.md`
+- Runbook: `docs/runbook.md`
+- API Contract: `docs/api.md`
+- ADR Guide: `docs/adr/README.md`
+- Changelog: `docs/changelog.md`
+- Working rules: `AGENTS.md`

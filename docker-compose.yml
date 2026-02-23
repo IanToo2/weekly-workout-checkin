@@ -1,17 +1,26 @@
-﻿version: "3.9"
 services:
-  postgres:
-    image: postgres:16
-    container_name: toyproject-postgres
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: toyproject-backend
     restart: unless-stopped
     environment:
-      POSTGRES_DB: toyproject
-      POSTGRES_USER: toyuser
-      POSTGRES_PASSWORD: toysecret
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173}
+      SERVER_PORT: 8080
     ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "8080:8080"
 
-volumes:
-  pgdata:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: toyproject-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
